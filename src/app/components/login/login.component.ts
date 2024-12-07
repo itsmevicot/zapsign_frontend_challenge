@@ -36,6 +36,7 @@ export class LoginComponent {
           console.error('Login failed', err);
           console.log('Full error response:', err);
           this.errorMessage = err.error?.error?.message || 'An unexpected error occurred.';
+          this.loginForm.reset();
         },
       });
     }
