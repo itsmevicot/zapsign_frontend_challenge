@@ -15,9 +15,7 @@ export class AuthService {
   login(email: string, password: string): Observable<any> {
     return this.http.post(this.apiUrl, { email, password }).pipe(
       catchError((error) => {
-        const message = error?.error?.message || 'Login failed. Please try again.';
-        console.error('Error during login:', message);
-        return throwError(() => new Error(message));
+        return throwError(() => error);
       })
     );
   }
