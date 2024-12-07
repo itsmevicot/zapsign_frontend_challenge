@@ -1,20 +1,20 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from './auth.service';
+import { LoginService } from './login.service';
 
 @Component({
-  selector: 'app-auth',
+  selector: 'app-login',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.css'],
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css'],
 })
-export class AuthComponent {
+export class LoginComponent {
   loginForm: FormGroup;
   errorMessage: string | null = null;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private loginService: LoginService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
@@ -26,7 +26,7 @@ export class AuthComponent {
       const { email, password } = this.loginForm.value;
       this.errorMessage = null;
 
-      this.authService.login(email, password).subscribe({
+      this.loginService.login(email, password).subscribe({
         next: (response) => {
           console.log('Login successful', response);
           localStorage.setItem('accessToken', response.access);
