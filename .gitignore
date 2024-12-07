@@ -16,6 +16,7 @@ pubspec.lock
 !.devcontainer/recommended-devcontainer.json
 !.devcontainer/recommended-Dockerfile
 .settings/
+.vscode/
 .vscode/launch.json
 .vscode/settings.json
 .vscode/tasks.json
@@ -56,3 +57,6 @@ baseline.json
 
 # Ignore cache created with the Angular CLI.
 .angular/
+
+.editorconfig
+.vscode/
