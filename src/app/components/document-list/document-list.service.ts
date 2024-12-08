@@ -56,6 +56,27 @@ export class DocumentListService {
     );
   }
 
+  updateDocument(document: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}${document.id}/`, document, {
+      headers: this.createAuthHeaders(),
+    });
+  }
+
+  updateSigner(data: {
+    id: number;
+    name?: string;
+    email?: string;
+    status?: string;
+  }): Observable<any> {
+    const url = `${this.apiUrl.replace('documents/', '')}signers/${data.id}/`;
+    return this.http.put(url, data, { headers: this.createAuthHeaders() }).pipe(
+      catchError((error) => {
+        console.error('Error updating signer:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
   private createAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('accessToken');
     if (!token) {
