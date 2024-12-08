@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -12,12 +13,41 @@ export class DocumentListService {
   constructor(private http: HttpClient) {}
 
   getCompanyDocuments(): Observable<any[]> {
-    const accessToken = localStorage.getItem('accessToken');
+    const headers = this.createAuthHeaders();
+    console.log(`Making GET request to: ${this.apiUrl} with headers:`, headers);
 
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${accessToken}`,
+    return this.http.get<any[]>(this.apiUrl, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error in getCompanyDocuments:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  deleteDocument(documentId: number): Observable<void> {
+    const headers = this.createAuthHeaders();
+    console.log(
+      `Making DELETE request to: ${this.apiUrl}${documentId} with headers:`,
+      headers
+    );
+
+    return this.http
+      .delete<void>(`${this.apiUrl}${documentId}/`, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error in deleteDocument:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  private createAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      console.warn('No access token found. Make sure the user is logged in.');
+    }
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`,
     });
-
-    return this.http.get<any[]>(this.apiUrl, { headers });
   }
 }

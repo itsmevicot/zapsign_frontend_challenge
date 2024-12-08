@@ -20,6 +20,7 @@ export class DocumentListComponent implements OnInit {
     this.fetchDocuments();
   }
 
+  // Fetch Documents from Backend
   fetchDocuments(): void {
     this.documentListService.getCompanyDocuments().subscribe({
       next: (data) => {
@@ -32,5 +33,30 @@ export class DocumentListComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  viewDetails(document: any): void {
+    console.log('Detailing document:', document);
+  }
+
+  deleteDocument(document: any): void {
+    if (
+      confirm(
+        `Are you sure you want to delete the document "${document.name}"?`
+      )
+    ) {
+      this.documentListService.deleteDocument(document.id).subscribe({
+        next: () => {
+          this.documents = this.documents.filter(
+            (doc) => doc.id !== document.id
+          );
+          console.log('Document deleted successfully.');
+        },
+        error: (error) => {
+          console.error('Error deleting document:', error);
+          alert('Failed to delete document. Please try again later.');
+        },
+      });
+    }
   }
 }
