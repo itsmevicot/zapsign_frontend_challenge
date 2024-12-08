@@ -9,6 +9,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { LoginService } from './login.service';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-login',
@@ -60,6 +61,15 @@ export class LoginComponent implements OnInit {
 
           localStorage.setItem('accessToken', response.access);
           localStorage.setItem('refreshToken', response.refresh);
+
+          const decodedToken: any = jwtDecode(response.access);
+          const companyId = decodedToken.company_id;
+
+          if (companyId) {
+            localStorage.setItem('companyId', companyId);
+          } else {
+            console.warn('Company ID not found in token');
+          }
 
           this.router.navigate(['/home']);
         },
