@@ -1,4 +1,13 @@
 <div class="list-group">
+  <!-- Display when no documents are available -->
+  <div
+    *ngIf="!loading && !documents.length && !errorMessage"
+    class="list-group-item text-center"
+  >
+    <h5>You don't have documents yet.</h5>
+  </div>
+
+  <!-- Display the list of documents -->
   <div *ngFor="let document of documents" class="list-group-item">
     <h5>{{ document.name }}</h5>
     <p>
@@ -6,4 +15,14 @@
       <a [href]="document.link" target="_blank">{{ document.link }}</a>
     </p>
   </div>
+</div>
+
+<!-- Loading indicator -->
+<div *ngIf="loading" class="text-center">
+  <p>Loading...</p>
+</div>
+
+<!-- Error message -->
+<div *ngIf="errorMessage" class="alert alert-danger text-center">
+  <p>{{ errorMessage }}</p>
 </div>

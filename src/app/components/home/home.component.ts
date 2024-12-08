@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
   constructor(private router: Router, private homeService: HomeService) {}
 
   ngOnInit(): void {
-    const companyId = localStorage.getItem('companyId'); // Retrieve company_id from localStorage
+    const companyId = localStorage.getItem('companyId');
     if (companyId) {
       this.loadCompanyName(companyId);
     } else {
