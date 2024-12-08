@@ -52,6 +52,10 @@ export class RegisterComponent {
 
   onSubmit(): void {
     console.log('Form submitted:', this.registerForm.value);
+
+    this.errorMessage = null;
+    this.fieldErrors = {};
+
     if (this.registerForm.valid) {
       const { name, email, apiToken, password, confirmPassword } =
         this.registerForm.value;
@@ -60,9 +64,6 @@ export class RegisterComponent {
         this.fieldErrors = { confirmPassword: "Passwords don't match!" };
         return;
       }
-
-      this.errorMessage = null;
-      this.fieldErrors = {};
 
       this.registerService
         .register({
@@ -77,14 +78,22 @@ export class RegisterComponent {
             console.log('Registration successful:', response);
             this.successMessage = 'Registration successful!';
             this.registerForm.reset();
-            this.router.navigate(['/login']);
+            this.router.navigate(['/login'], {
+              queryParams: { successMessage: 'Registered successfully!' },
+            });
           },
           error: (err) => {
             console.error('Registration failed:', err);
+
             if (err.error?.error?.message) {
-              this.fieldErrors = err.error.error.message;
+              this.errorMessage = err.error.error.message;
+            } else if (err.status === 500) {
+              this.errorMessage =
+                'Internal Server Error. Please try again later.';
             } else {
-              this.errorMessage = 'An unexpected error occurred.';
+              this.errorMessage =
+                err.error?.error?.title ||
+                'An unexpected error occurred. Please try again.';
             }
           },
         });

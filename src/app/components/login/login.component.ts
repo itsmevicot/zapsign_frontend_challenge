@@ -1,6 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LoginService } from './login.service';
 
@@ -11,14 +17,29 @@ import { LoginService } from './login.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   errorMessage: string | null = null;
+  successMessage: string | null = null;
 
-  constructor(private fb: FormBuilder, private loginService: LoginService) {
+  constructor(
+    private fb: FormBuilder,
+    private loginService: LoginService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
+    });
+  }
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      if (params['successMessage']) {
+        this.successMessage = params['successMessage'];
+        setTimeout(() => (this.successMessage = null), 5000);
+      }
     });
   }
 
@@ -35,8 +56,8 @@ export class LoginComponent {
         },
         error: (err) => {
           console.error('Login failed', err);
-          console.log('Full error response:', err);
-          this.errorMessage = err.error?.error?.message || 'An unexpected error occurred.';
+          this.errorMessage =
+            err.error?.error?.message || 'An unexpected error occurred.';
           this.loginForm.reset();
         },
       });
