@@ -1,0 +1,219 @@
+<section class="vh-100" style="background-color: #eee">
+  <div class="container h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-lg-12 col-xl-11">
+        <div class="card text-black" style="border-radius: 25px">
+          <div class="card-body p-md-5">
+            <div class="row justify-content-center">
+              <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
+                  Sign Up
+                </p>
+
+                <form
+                  [formGroup]="registerForm"
+                  (ngSubmit)="onSubmit()"
+                  class="mx-1 mx-md-4"
+                >
+                  <!-- Name -->
+                  <div class="d-flex flex-column mb-4">
+                    <label for="name" class="form-label">Name</label>
+                    <input
+                      type="text"
+                      id="name"
+                      class="form-control"
+                      formControlName="name"
+                      placeholder="Your Name"
+                    />
+                    <small
+                      class="text-danger"
+                      *ngIf="
+                        registerForm.get('name')?.touched &&
+                        registerForm.get('name')?.errors?.['required']
+                      "
+                    >
+                      Name is required.
+                    </small>
+                  </div>
+
+                  <!-- Email -->
+                  <div class="d-flex flex-column mb-4">
+                    <label for="email" class="form-label">Email</label>
+                    <input
+                      type="email"
+                      id="email"
+                      class="form-control"
+                      formControlName="email"
+                      placeholder="Your Email"
+                    />
+                    <small
+                      class="text-danger"
+                      *ngIf="
+                        registerForm.get('email')?.touched &&
+                        registerForm.get('email')?.errors?.['required']
+                      "
+                    >
+                      Email is required.
+                    </small>
+                    <small
+                      class="text-danger"
+                      *ngIf="
+                        registerForm.get('email')?.touched &&
+                        registerForm.get('email')?.errors?.['email']
+                      "
+                    >
+                      Please enter a valid email address.
+                    </small>
+                  </div>
+
+                  <!-- API Token -->
+                  <div class="d-flex flex-column mb-4">
+                    <label for="apiToken" class="form-label">API Token</label>
+                    <input
+                      type="text"
+                      id="apiToken"
+                      class="form-control"
+                      formControlName="apiToken"
+                      placeholder="Your API Token"
+                      maxlength="36"
+                    />
+                    <small
+                      class="text-danger"
+                      *ngIf="
+                        registerForm.get('apiToken')?.touched &&
+                        registerForm.get('apiToken')?.errors?.['required']
+                      "
+                    >
+                      API Token is required.
+                    </small>
+                    <small
+                      class="text-danger"
+                      *ngIf="
+                        registerForm.get('apiToken')?.touched &&
+                        registerForm.get('apiToken')?.errors?.['pattern']
+                      "
+                    >
+                      API Token must be a valid UUID format.
+                    </small>
+                  </div>
+
+                  <!-- Password -->
+                  <div class="d-flex flex-column mb-4">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="position-relative">
+                      <input
+                        [type]="showPassword ? 'text' : 'password'"
+                        id="password"
+                        class="form-control"
+                        formControlName="password"
+                        placeholder="Your Password"
+                      />
+                      <button
+                        type="button"
+                        class="password-toggle"
+                        (click)="togglePasswordVisibility('password')"
+                      >
+                        <i
+                          class="fas"
+                          [class.fa-eye]="!showPassword"
+                          [class.fa-eye-slash]="showPassword"
+                        ></i>
+                      </button>
+                    </div>
+                    <small
+                      class="text-danger"
+                      *ngIf="
+                        registerForm.get('password')?.touched &&
+                        registerForm.get('password')?.errors?.['required']
+                      "
+                    >
+                      Password is required.
+                    </small>
+                  </div>
+
+                  <!-- Confirm Password -->
+                  <div class="d-flex flex-column mb-4">
+                    <label for="confirmPassword" class="form-label">
+                      Confirm Password
+                    </label>
+                    <div class="position-relative">
+                      <input
+                        [type]="showConfirmPassword ? 'text' : 'password'"
+                        id="confirmPassword"
+                        class="form-control"
+                        formControlName="confirmPassword"
+                        placeholder="Confirm Your Password"
+                      />
+                      <button
+                        type="button"
+                        class="password-toggle"
+                        (click)="togglePasswordVisibility('confirmPassword')"
+                      >
+                        <i
+                          class="fas"
+                          [class.fa-eye]="!showConfirmPassword"
+                          [class.fa-eye-slash]="showConfirmPassword"
+                        ></i>
+                      </button>
+                    </div>
+                    <small
+                      class="text-danger"
+                      *ngIf="
+                        registerForm.get('confirmPassword')?.touched &&
+                        registerForm.get('confirmPassword')?.errors?.['required']
+                      "
+                    >
+                      Confirm Password is required.
+                    </small>
+                    <small
+                      class="text-danger"
+                      *ngIf="
+                        registerForm.get('confirmPassword')?.touched &&
+                        fieldErrors['confirmPassword']
+                      "
+                    >
+                      {{ fieldErrors["confirmPassword"] }}
+                    </small>
+                  </div>
+
+                  <!-- Already have an account -->
+                  <div class="text-center mb-5">
+                    <p>
+                      Already have an account?
+                      <a [routerLink]="'/login'" class="text-primary">
+                        Sign in
+                      </a>
+                    </p>
+                  </div>
+
+                  <!-- Submit Button -->
+                  <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                    <button
+                      type="submit"
+                      class="btn btn-primary btn-lg"
+                      [disabled]="!registerForm.valid"
+                    >
+                      Register
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <div
+                class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2"
+              >
+                <img
+                  src="assets/images/register-image.webp"
+                  class="img-fluid"
+                  alt="Register image"
+                  width="500"
+                  height="300"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
