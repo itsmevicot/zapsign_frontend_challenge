@@ -1,57 +1,109 @@
-<form (ngSubmit)="onSubmit()">
-  <div class="mb-3">
-    <label for="link" class="form-label">Public Link to PDF</label>
-    <input
-      id="link"
-      class="form-control"
-      [(ngModel)]="form.link"
-      name="link"
-      required
-    />
-  </div>
+<section class="vh-100">
+  <div class="container-fluid h-custom">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+        <form [formGroup]="documentForm" (ngSubmit)="onSubmit()">
+          <h2 class="fw-bold text-center mb-4">Document Uploader</h2>
 
-  <div class="mb-3">
-    <label for="name" class="form-label">Document Name</label>
-    <input
-      id="name"
-      class="form-control"
-      [(ngModel)]="form.name"
-      name="name"
-      required
-    />
-  </div>
+          <!-- Success message -->
+          <div *ngIf="successMessage" class="alert alert-success">
+            {{ successMessage }}
+          </div>
 
-  <div class="mb-3">
-    <label>Signators</label>
-    <div *ngFor="let signator of form.signators; let i = index" class="mb-3">
-      <div class="border p-3">
-        <input
-          class="form-control mb-2"
-          [(ngModel)]="signator.email"
-          placeholder="Email"
-          name="email{{ i }}"
-          required
-        />
-        <input
-          class="form-control mb-2"
-          [(ngModel)]="signator.name"
-          placeholder="Name"
-          name="name{{ i }}"
-          required
-        />
-        <button
-          type="button"
-          class="btn btn-danger"
-          (click)="removeSignator(i)"
-        >
-          Remove
-        </button>
+          <!-- Error message -->
+          <div *ngIf="errorMessage" class="alert alert-danger">
+            {{ errorMessage }}
+          </div>
+
+          <!-- Link input -->
+          <div class="form-outline mb-3">
+            <label class="form-label">Public Link to PDF</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter the PDF link"
+              formControlName="link"
+            />
+            <div
+              *ngIf="
+                documentForm.get('link')?.invalid &&
+                documentForm.get('link')?.touched
+              "
+              class="text-danger"
+            >
+              Please enter a valid PDF link.
+            </div>
+          </div>
+
+          <!-- Name input -->
+          <div class="form-outline mb-3">
+            <label class="form-label">Document Name</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter the document name"
+              formControlName="name"
+            />
+            <div
+              *ngIf="
+                documentForm.get('name')?.invalid &&
+                documentForm.get('name')?.touched
+              "
+              class="text-danger"
+            >
+              Document name is required.
+            </div>
+          </div>
+
+          <!-- Signators -->
+          <div class="mb-4">
+            <label class="form-label">Signators</label>
+            <div formArrayName="signators">
+              <div
+                *ngFor="let signator of signators.controls; let i = index"
+                class="mb-3"
+                [formGroupName]="i"
+              >
+                <input
+                  type="text"
+                  class="form-control mb-2"
+                  placeholder="Signator Email"
+                  formControlName="email"
+                />
+                <input
+                  type="text"
+                  class="form-control mb-2"
+                  placeholder="Signator Name"
+                  formControlName="name"
+                />
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  (click)="removeSignator(i)"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="btn btn-success"
+              (click)="addSignator()"
+            >
+              Add Signator
+            </button>
+          </div>
+
+          <!-- Submit button -->
+          <button
+            type="submit"
+            class="btn btn-primary w-100"
+            [disabled]="!documentForm.valid"
+          >
+            Upload Document
+          </button>
+        </form>
       </div>
     </div>
-    <button type="button" class="btn btn-success" (click)="addSignator()">
-      Add Signator
-    </button>
   </div>
-
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+</section>
