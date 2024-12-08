@@ -29,10 +29,7 @@ export class DocumentFormComponent implements OnInit {
     private router: Router
   ) {
     this.documentForm = this.fb.group({
-      link: [
-        '',
-        [Validators.required, Validators.pattern(/https?:\/\/.+\.(pdf)/i)],
-      ],
+      link: ['', [Validators.required, Validators.pattern(/https?:\/\/.+/i)]],
       name: ['', [Validators.required]],
       signators: this.fb.array([this.createSignator()]),
     });
@@ -52,11 +49,13 @@ export class DocumentFormComponent implements OnInit {
   }
 
   addSignator(): void {
+    this.errorMessage = null;
     this.signators.push(this.createSignator());
   }
 
   removeSignator(index: number): void {
     if (this.signators.length > 1) {
+      this.errorMessage = null;
       this.signators.removeAt(index);
     } else {
       this.errorMessage = 'At least one signator is required.';
@@ -66,20 +65,27 @@ export class DocumentFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.documentForm.valid) {
-      this.documentFormService
-        .uploadDocument(this.documentForm.value)
-        .subscribe({
-          next: (response: any) => {
-            this.successMessage = 'Document uploaded successfully.';
-            this.resetForm();
-            setTimeout(() => (this.successMessage = null), 3000);
-          },
-          error: (error: any) => {
-            this.errorMessage =
-              error.error?.message || 'An unexpected error occurred.';
-            setTimeout(() => (this.errorMessage = null), 3000);
-          },
-        });
+      const payload = {
+        url_pdf: this.documentForm.value.link,
+        name: this.documentForm.value.name,
+        signers: this.documentForm.value.signators.map((signator: any) => ({
+          name: signator.name,
+          email: signator.email,
+        })),
+      };
+
+      this.documentFormService.createDocument(payload).subscribe({
+        next: (response: any) => {
+          this.successMessage = 'Document uploaded successfully.';
+          this.resetForm();
+          setTimeout(() => (this.successMessage = null), 3000);
+        },
+        error: (error: any) => {
+          this.errorMessage =
+            error.error?.message || 'An unexpected error occurred.';
+          setTimeout(() => (this.errorMessage = null), 3000);
+        },
+      });
     } else {
       this.errorMessage = 'Please ensure all fields are filled out correctly.';
       setTimeout(() => (this.errorMessage = null), 3000);
@@ -90,9 +96,10 @@ export class DocumentFormComponent implements OnInit {
     this.documentForm.reset({
       link: '',
       name: '',
-      signators: [this.createSignator()],
     });
     this.signators.clear();
     this.signators.push(this.createSignator());
+    this.errorMessage = null;
+    this.successMessage = null;
   }
 }

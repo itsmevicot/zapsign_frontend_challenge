@@ -12,7 +12,7 @@ export class DocumentFormService {
 
   constructor(private http: HttpClient) {}
 
-  uploadDocument(documentData: any): Observable<any> {
+  createDocument(documentData: any): Observable<any> {
     return this.http.post(this.apiUrl, documentData).pipe(
       catchError((error) => {
         return throwError(() => error);
