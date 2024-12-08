@@ -1,5 +1,6 @@
 services:
   frontend:
+    container_name: zapsign-frontend
     build:
       context: .
     ports:
@@ -11,7 +12,8 @@ services:
       - /app/node_modules
     command: npm run start -- --host 0.0.0.0
     networks:
-      - frontend-network
+      - zapsign-network
 
 networks:
-  frontend-network:
+  zapsign-network:
+    name: zapsign-network
