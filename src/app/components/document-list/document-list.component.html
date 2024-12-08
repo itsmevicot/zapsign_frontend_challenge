@@ -73,20 +73,39 @@
         </div>
         <div class="modal-body">
           <div *ngIf="selectedDocument">
-            <p><strong>Name:</strong> {{ selectedDocument.name }}</p>
-            <p><strong>Status:</strong> {{ selectedDocument.status }}</p>
-            <p>
-              <strong>Created By:</strong> {{ selectedDocument.created_by }}
-            </p>
-            <p>
-              <strong>Created At:</strong> {{ selectedDocument.created_at }}
-            </p>
-            <h6>Signers:</h6>
-            <ul>
-              <li *ngFor="let signer of selectedDocument.signers">
-                <strong>Name:</strong> {{ signer.name }},
-                <strong>Email:</strong> {{ signer.email }},
-                <strong>Status:</strong> {{ signer.status || "N/A" }}
+            <ul class="list-group">
+              <!-- Document Details -->
+              <li class="list-group-item">
+                <strong>Name:</strong> {{ selectedDocument.name }}
+              </li>
+              <li class="list-group-item">
+                <strong>Status:</strong> {{ selectedDocument.status }}
+              </li>
+              <li class="list-group-item">
+                <strong>Created By:</strong> {{ selectedDocument.created_by }}
+              </li>
+              <li class="list-group-item">
+                <strong>Created At:</strong> {{ selectedDocument.created_at }}
+              </li>
+
+              <!-- Signers Section -->
+              <li
+                class="list-group-item bg-light text-dark fw-bold"
+                *ngIf="selectedDocument.signers?.length"
+              >
+                Signers
+              </li>
+              <li
+                class="list-group-item"
+                *ngFor="let signer of selectedDocument.signers"
+              >
+                <div>
+                  <p class="mb-1"><strong>Name:</strong> {{ signer.name }}</p>
+                  <p class="mb-1"><strong>Email:</strong> {{ signer.email }}</p>
+                  <p class="mb-0">
+                    <strong>Status:</strong> {{ signer.status || "N/A" }}
+                  </p>
+                </div>
               </li>
             </ul>
           </div>
