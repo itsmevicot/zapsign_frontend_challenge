@@ -1,0 +1,17 @@
+services:
+  frontend:
+    build:
+      context: .
+    ports:
+      - "4200:4200"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run start -- --host 0.0.0.0
+    networks:
+      - frontend-network
+
+networks:
+  frontend-network:
