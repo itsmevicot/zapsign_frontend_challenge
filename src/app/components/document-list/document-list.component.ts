@@ -30,8 +30,8 @@ export class DocumentListComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.editForm = this.fb.group({
-      name: ['', Validators.required], // Default field for both document and signer
-      email: [''], // Only applicable for signers
+      name: ['', Validators.required],
+      email: [''],
     });
   }
 
@@ -71,9 +71,9 @@ export class DocumentListComponent implements OnInit {
   openEditModal(type: 'document' | 'signer', item: any): void {
     this.editingType = type;
     this.editingItem = item;
-    this.editForm = this.fb.group({
-      name: [item.name],
-      ...(type === 'signer' && { email: [item.email] }),
+    this.editForm.reset({
+      name: item.name || '',
+      email: type === 'signer' ? item.email || '' : '',
     });
 
     const modal = new bootstrap.Modal(document.getElementById('editModal')!);
@@ -129,6 +129,15 @@ export class DocumentListComponent implements OnInit {
       const modal = bootstrap.Modal.getInstance(modalElement);
       modal?.hide();
     }
+
+    const backdrop = document.querySelector('.modal-backdrop');
+    if (backdrop) {
+      backdrop.remove();
+    }
+
+    this.editingType = null;
+    this.editingItem = null;
+    this.editForm.reset();
   }
 
   deleteDocument(document: any): void {
