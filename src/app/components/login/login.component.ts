@@ -53,6 +53,7 @@ export class LoginComponent implements OnInit {
           console.log('Login successful', response);
           localStorage.setItem('accessToken', response.access);
           localStorage.setItem('refreshToken', response.refresh);
+          this.router.navigate(['/home']);
         },
         error: (err) => {
           console.error('Login failed', err);
