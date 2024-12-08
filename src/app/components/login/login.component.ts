@@ -35,6 +35,12 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const isLoggedIn = !!localStorage.getItem('accessToken');
+    if (isLoggedIn) {
+      this.router.navigate(['/home']);
+      return;
+    }
+
     this.route.queryParams.subscribe((params) => {
       if (params['successMessage']) {
         this.successMessage = params['successMessage'];
@@ -51,8 +57,10 @@ export class LoginComponent implements OnInit {
       this.loginService.login(email, password).subscribe({
         next: (response) => {
           console.log('Login successful', response);
+
           localStorage.setItem('accessToken', response.access);
           localStorage.setItem('refreshToken', response.refresh);
+
           this.router.navigate(['/home']);
         },
         error: (err) => {
