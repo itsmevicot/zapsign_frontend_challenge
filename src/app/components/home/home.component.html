@@ -1,1 +1,86 @@
-<p>home works!</p>
+<div class="container-fluid p-0">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <!-- Left Icon and Name -->
+      <div class="d-flex align-items-center">
+        <i class="fa fa-user-circle fa-lg text-white me-2"></i>
+        <!-- User Icon -->
+        <span class="navbar-text text-white">Backend User Name</span>
+        <!-- Name from Backend -->
+      </div>
+
+      <!-- Right-side Gear Icon -->
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link"
+            href="#"
+            id="settingsDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="fa fa-gear fa-lg"></i>
+            <!-- FontAwesome Gear Icon -->
+          </a>
+          <ul
+            class="dropdown-menu dropdown-menu-end"
+            aria-labelledby="settingsDropdown"
+          >
+            <li>
+              <a
+                class="dropdown-item d-flex align-items-center"
+                (click)="logout()"
+                href="#"
+              >
+                <i class="fa fa-sign-out me-2"></i>Sign out
+                <!-- FontAwesome Logout Icon -->
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Tabs -->
+  <ul class="nav nav-tabs mt-4 justify-content-center">
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        data-bs-toggle="tab"
+        href="#list"
+        (click)="activeTab = 'list'"
+        [class.active]="activeTab === 'list'"
+      >
+        <i class="fa fa-list me-2"></i>
+        <!-- Icon for Document List -->
+        Document List
+      </a>
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        data-bs-toggle="tab"
+        href="#form"
+        (click)="activeTab = 'form'"
+        [class.active]="activeTab === 'form'"
+      >
+        <i class="fa fa-plus me-2"></i>
+        <!-- Icon for Add Document -->
+        Add Document
+      </a>
+    </li>
+  </ul>
+
+  <!-- Tab Content -->
+  <div class="tab-content mt-4">
+    <div *ngIf="activeTab === 'list'">
+      <app-document-list></app-document-list>
+    </div>
+    <div *ngIf="activeTab === 'form'">
+      <app-document-form></app-document-form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+<div class="list-group">
+  <div *ngFor="let document of documents" class="list-group-item">
+    <h5>{{ document.name }}</h5>
+    <p>
+      Public Link:
+      <a [href]="document.link" target="_blank">{{ document.link }}</a>
+    </p>
+  </div>
+</div>

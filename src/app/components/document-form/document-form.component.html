@@ -1,0 +1,57 @@
+<form (ngSubmit)="onSubmit()">
+  <div class="mb-3">
+    <label for="link" class="form-label">Public Link to PDF</label>
+    <input
+      id="link"
+      class="form-control"
+      [(ngModel)]="form.link"
+      name="link"
+      required
+    />
+  </div>
+
+  <div class="mb-3">
+    <label for="name" class="form-label">Document Name</label>
+    <input
+      id="name"
+      class="form-control"
+      [(ngModel)]="form.name"
+      name="name"
+      required
+    />
+  </div>
+
+  <div class="mb-3">
+    <label>Signators</label>
+    <div *ngFor="let signator of form.signators; let i = index" class="mb-3">
+      <div class="border p-3">
+        <input
+          class="form-control mb-2"
+          [(ngModel)]="signator.email"
+          placeholder="Email"
+          name="email{{ i }}"
+          required
+        />
+        <input
+          class="form-control mb-2"
+          [(ngModel)]="signator.name"
+          placeholder="Name"
+          name="name{{ i }}"
+          required
+        />
+        <button
+          type="button"
+          class="btn btn-danger"
+          (click)="removeSignator(i)"
+        >
+          Remove
+        </button>
+      </div>
+    </div>
+    <button type="button" class="btn btn-success" (click)="addSignator()">
+      Add Signator
+    </button>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
