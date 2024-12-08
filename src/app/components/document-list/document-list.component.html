@@ -3,7 +3,7 @@
 
   <!-- No Documents Message -->
   <div
-    *ngIf="!loading && !documents.length && !errorMessage"
+    *ngIf="!loading && documents?.length === 0 && !errorMessage"
     class="text-center"
   >
     <h5>You don't have any documents yet.</h5>
@@ -29,7 +29,9 @@
           Created: {{ document.created_at | date : "short" }}
         </p>
         <p class="mb-0 text-muted">Status: {{ document.status }}</p>
-        <p class="mb-0 text-muted">Signers: {{ document.signers.length }}</p>
+        <p class="mb-0 text-muted">
+          Signers: {{ document.signers?.length || 0 }}
+        </p>
       </div>
 
       <!-- Action Buttons -->

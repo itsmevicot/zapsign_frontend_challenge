@@ -20,11 +20,11 @@ export class DocumentListComponent implements OnInit {
     this.fetchDocuments();
   }
 
-  // Fetch Documents from Backend
   fetchDocuments(): void {
     this.documentListService.getCompanyDocuments().subscribe({
       next: (data) => {
-        this.documents = data;
+        console.log('Fetched documents:', data);
+        this.documents = data || [];
         this.loading = false;
       },
       error: (error) => {
