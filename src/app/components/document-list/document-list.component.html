@@ -25,9 +25,7 @@
       <!-- Document Info -->
       <div>
         <h5 class="fw-bold mb-1">{{ document.name }}</h5>
-        <p class="mb-0 text-muted">
-          Created: {{ document.created_at | date : "short" }}
-        </p>
+        <p class="mb-0 text-muted">Created: {{ document.created_at }}</p>
         <p class="mb-0 text-muted">Status: {{ document.status }}</p>
         <p class="mb-0 text-muted">
           Signers: {{ document.signers?.length || 0 }}
@@ -38,7 +36,7 @@
       <div>
         <button
           class="btn btn-outline-primary me-2"
-          (click)="viewDetails(document)"
+          (click)="viewDetails(document.id)"
         >
           <i class="fas fa-info-circle"></i>
         </button>
@@ -48,6 +46,63 @@
         >
           <i class="fas fa-trash-alt"></i>
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Document Details -->
+  <div
+    class="modal fade"
+    id="documentDetailModal"
+    tabindex="-1"
+    aria-labelledby="documentDetailModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="documentDetailModalLabel">
+            Document Details
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="selectedDocument">
+            <p><strong>Name:</strong> {{ selectedDocument.name }}</p>
+            <p><strong>Status:</strong> {{ selectedDocument.status }}</p>
+            <p>
+              <strong>Created By:</strong> {{ selectedDocument.created_by }}
+            </p>
+            <p>
+              <strong>Created At:</strong> {{ selectedDocument.created_at }}
+            </p>
+            <h6>Signers:</h6>
+            <ul>
+              <li *ngFor="let signer of selectedDocument.signers">
+                <strong>Name:</strong> {{ signer.name }},
+                <strong>Email:</strong> {{ signer.email }},
+                <strong>Status:</strong> {{ signer.status || "N/A" }}
+              </li>
+            </ul>
+          </div>
+          <div *ngIf="!selectedDocument">
+            <p>Loading details...</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+        </div>
       </div>
     </div>
   </div>

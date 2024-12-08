@@ -41,6 +41,21 @@ export class DocumentListService {
       );
   }
 
+  getDocumentDetails(documentId: number): Observable<any> {
+    const headers = this.createAuthHeaders();
+    console.log(
+      `Making GET request to: ${this.apiUrl}${documentId} with headers:`,
+      headers
+    );
+
+    return this.http.get<any>(`${this.apiUrl}${documentId}/`, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error in getDocumentDetails:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
   private createAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('accessToken');
     if (!token) {
